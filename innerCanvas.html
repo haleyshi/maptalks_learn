@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地图 - 在Canvas容器中加载</title>
+<style type="text/css">
+    html,
+    body {
+        margin: 0px;
+        height: 100%;
+        width: 100%
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maptalks@0.34.0/dist/maptalks.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/maptalks@0.34.0/dist/maptalks.min.js"></script>
+
+<body>
+
+    <canvas width="600" height="300" id="map" style="border:1px solid; position:relative; left:30px; top:30px"></canvas>
+
+    <script>
+        var res = (window.devicePixelRatio || (window.screen.deviceXDPI / window.screen.logicalXDPI)) > 1;
+        if (res) {
+            // retina, see https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
+            var canvas = document.getElementById('map');
+            var r = 2;
+            canvas.width *= r;
+            canvas.height *= r;
+            canvas.style.cssText += 'width:' + Math.round(canvas.width / r) + 'px;height:' + Math.round(canvas.height / r) + 'px';
+        }
+
+        var map = new maptalks.Map('map', {
+            center: [113.2726366227, 23.1081860500],
+            zoom: 14,
+            zoomControl: true, // ignored in a canvas container
+            scaleControl: true, // ignored in a canvas container
+            baseLayer: new maptalks.TileLayer('base', {
+                urlTemplate: 'http://www.google.cn/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i342009817!3m9!2sen-US!3sCN!5e18!12m1!1e47!12m3!1e37!2m1!1ssmartmaps!4e0&token=32965',
+                subdomains: ['a', 'b', 'c', 'd']
+            })
+        });
+    </script>
+</body>
+
+</html>

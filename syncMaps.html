@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地图 - 同步地图</title>
+<style type="text/css">
+    html,
+    body {
+        margin: 0px;
+        height: 100%;
+        width: 100%
+    }
+    
+    #map0 {
+        width: calc(50% - 2px);
+        height: calc(100% - 2px);
+        float: left;
+        border: 1px solid
+    }
+    
+    #map1 {
+        width: calc(50% - 2px);
+        height: calc(100% - 2px);
+        float: right;
+        border: 1px solid
+    }
+    
+    .attr {
+        background-color: #34495e;
+        color: #fff;
+        padding: 0px 4px;
+        font: 16px sans-serif
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maptalks@0.34.0/dist/maptalks.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/maptalks@0.34.0/dist/maptalks.min.js"></script>
+
+<body>
+    <div id="map0"></div>
+    <div id="map1"></div>
+
+    <script>
+        var map0 = new maptalks.Map('map0', {
+            center: [113.2726366227, 23.1081860500],
+            zoom: 14,
+            attribution: {
+                content: '&copy; Google Maps'
+            },
+            zoomControl: true,
+            baseLayer: new maptalks.TileLayer('base', {
+                urlTemplate: 'http://www.google.cn/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i342009817!3m9!2sen-US!3sCN!5e18!12m1!1e47!12m3!1e37!2m1!1ssmartmaps!4e0&token=32965',
+                subdomains: ['a', 'b', 'c', 'd']
+            })
+        });
+
+
+        var map1 = new maptalks.Map('map1', {
+            center: map0.getCenter(),
+            zoom: map0.getZoom(),
+            draggable: false, // disable draggble
+            scrollWheelZoom: false, // disable scroll wheel zoom
+            dblClickZoom: false, // disable doubleclick
+            attribution: {
+                content: '&copy; Google Maps'
+            },
+            baseLayer: new maptalks.TileLayer('base1', {
+                urlTemplate: 'http://www.google.cn/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i342009817!3m9!2sen-US!3sCN!5e18!12m1!1e47!12m3!1e37!2m1!1ssmartmaps!4e0&token=32965',
+                subdomains: ['a', 'b', 'c', 'd']
+            })
+        });
+
+        map0.on('moving', function(e) {
+            map1.setCenter(e.target.getCenter());
+        });
+
+        map0.on('zoomend', function(e) {
+            map1.setCenterAndZoom(e.target.getCenter(), e.target.getZoom());
+        });
+
+        map0.on('pitch', function(e) {
+            map1.setPitch(e.target.getPitch());
+        });
+
+        map0.on('rotate', function(e) {
+            map1.setBearing(e.target.getBearing());
+        });
+
+        new maptalks.control.Toolbar({
+                'position': 'top-right',
+                'items': [{
+                    item: 'move me',
+                    click: function() {}
+                }]
+            })
+            .addTo(map0);
+    </script>
+</body>
+
+</html>
